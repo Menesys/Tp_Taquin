@@ -5,10 +5,20 @@ html {
     line-height: 1.4;
 }
 
+h1 {
+  text-align: center;
+}
+
 .wrapper {
+  float:right;
 	margin: 0 auto;
-	width: 1000px;
-	text-align: center;
+	width: 70%;
+  text-align: center;
+}
+
+.params {
+  float:left;
+  width: 30%;
 }
 
 #puzzleStart {
@@ -16,5 +26,5 @@ html {
 	padding: 12px 20px;
 	font-size: 1.2em;
 	cursor: pointer;
-	
+
 }

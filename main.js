@@ -1,3 +1,10 @@
+/*
+Mettre movenumber=0 après
+
+
+
+*/
+
 // Function qui s'exécute toute seule (cf. premiers slides du cours)
 // Comme cette balise est à la fin de la page, on est sur que le code HTML a été entièrement chargé.
 // Equivalent d'un $('document').ready(function(){...}); en jQuery
@@ -21,32 +28,43 @@
 	var mouse;
 
 	var buttonStart;
-
+	var moveNumber;
 	/**
-	 * Initialisation du jeu
-	 */
+	* Initialisation du jeu
+	*/
 	function initGame(){
 		plateauImage = new Image();
 		plateauImage.addEventListener('load', onImageLoaded, false);
 		plateauImage.src = "level-1.jpg";
+
+
 	}
 
 	/**
-	 * Callback appelé après le chargement de l'image de fond
-	 */
+	* Callback appelé après le chargement de l'image de fond
+	*/
 	function onImageLoaded(e) {
 		pieceLargeur = Math.floor(plateauImage.width / DIFFICULTE)
 		pieceHauteur = Math.floor(plateauImage.height / DIFFICULTE)
 		plateauLargeur = pieceLargeur * DIFFICULTE;
 		plateauHauteur = pieceHauteur * DIFFICULTE;
 
+		document.getElementById("difficulty").addEventListener('change', setDifficulty, false);
 		setCanvas();
 		initPuzzle();
 	}
 
+	function setDifficulty(){
+		DIFFICULTE = document.getElementById('difficulty').value;
+		pieceLargeur = Math.floor(plateauImage.width / DIFFICULTE)
+		pieceHauteur = Math.floor(plateauImage.height / DIFFICULTE)
+		plateauLargeur = pieceLargeur * DIFFICULTE;
+		plateauHauteur = pieceHauteur * DIFFICULTE;
+		initPuzzle();
+	}
 	/**
-	 * Initialisation du canvas
-	 */
+	* Initialisation du canvas
+	*/
 	function setCanvas(){
 		canvas = document.getElementById('puzzleCanvas');
 		canvasContexte = canvas.getContext('2d');
@@ -56,10 +74,11 @@
 	}
 
 	/**
-	 * Initialisation du puzzle
-	 * On pourra appeler cette fonction pour réinitialiser le puzzle
-	 */
+	* Initialisation du puzzle
+	* On pourra appeler cette fonction pour réinitialiser le puzzle
+	*/
 	function initPuzzle(){
+		moveNumber = 0;
 		pieces = [];
 
 		// Position du curseur
@@ -72,7 +91,6 @@
 		canvasContexte.drawImage(plateauImage, 0, 0, plateauLargeur, plateauHauteur, 0, 0, plateauLargeur, plateauHauteur);
 
 		displayInstructions("Bonne chance !");
-		displayName(prompt('entrer votre nom'))
 
 		// Dessiner les pièces
 		buildPieces();
@@ -80,8 +98,8 @@
 
 	/*-----------------------------------------------------------------------------------------------------*/
 	/**
-	 * Création des canvas pour afficher les instructions
-	 */
+	* Création des canvas pour afficher les instructions
+	*/
 	function displayName(name){
 		// Création d'un rectangle semi-transparent
 		canvasContexte.fillStyle = "#000000";
@@ -99,8 +117,8 @@
 	/*-----------------------------------------------------------------------------------------------------*/
 
 	/**
-	 * Création des canvas pour afficher les instructions
-	 */
+	* Création des canvas pour afficher les instructions
+	*/
 	function displayInstructions(msg){
 		// Création d'un rectangle semi-transparent
 		canvasContexte.fillStyle = "#000000";
@@ -117,8 +135,8 @@
 	}
 
 	/**
-	 * Créer les pièces du puzzle
-	 */
+	* Créer les pièces du puzzle
+	*/
 	function buildPieces(){
 		var i;
 		var piece;
@@ -147,9 +165,9 @@
 	}
 
 	/**
-	 * Callback appelé sur l'évènement onmousedown
-	 * Mélanger le puzzle : dessiner les pièces de manière aléatoire dans le canevas
-	 */
+	* Callback appelé sur l'évènement onmousedown
+	* Mélanger le puzzle : dessiner les pièces de manière aléatoire dans le canevas
+	*/
 	function shufflePuzzle(){
 		var i;
 		var piece;
@@ -188,9 +206,9 @@
 	}
 
 	/**
-	 * Callback appelé sur l'évènement onmousedown après un clic sur le puzzle.
-	 * Nous devons déterminer la pièce qui a été cliquée.
-	 */
+	* Callback appelé sur l'évènement onmousedown après un clic sur le puzzle.
+	* Nous devons déterminer la pièce qui a été cliquée.
+	*/
 	function onPuzzleClick(e) {
 		// Ce bloc retourne la position du curseur dans le canevas.
 		// Dans notre cas : c'est la possition où le clic a été fait.
@@ -239,16 +257,18 @@
 			// Evènement : attendre que l'utilisateur relache son curseur
 			// Cela signifie qu'il dépose la pièce
 			document.onmouseup = pieceDropped;
+			moveNumber = moveNumber +1;
+			document.getElementById("moves").innerHTML = moveNumber;
 		}
 	}
 
 	/**
-	 * Détermine si une pièce a été sélectionnée (cliquée).
-	 *
-	 * Comment ? Itérer sur chaque pièce du puzzle et déterminer si la position du clic
-	 * était dans les frontières de l'une de nos pièces. Si oui, on retourne l'objet correspondant.
-	 * Si non, retourner null.
-	 */
+	* Détermine si une pièce a été sélectionnée (cliquée).
+	*
+	* Comment ? Itérer sur chaque pièce du puzzle et déterminer si la position du clic
+	* était dans les frontières de l'une de nos pièces. Si oui, on retourne l'objet correspondant.
+	* Si non, retourner null.
+	*/
 	function checkPieceClicked(){
 		var i;
 		var piece;
@@ -266,8 +286,8 @@
 	}
 
 	/**
-	 * Callback appelé quand l'utilisateur déplace sont curseur après avoir sélectionné une pièce.
-	 */
+	* Callback appelé quand l'utilisateur déplace sont curseur après avoir sélectionné une pièce.
+	*/
 	function updatePuzzle(e) {
 		var i;
 		var piece;
@@ -335,12 +355,12 @@
 	}
 
 	/**
-	 * Callback appelé quand l'utilisateur dépose la pièce sélectionnée/déplacée.
-	 *
-	 * Nous avons avec succès déplacée la pièce sélectionnée.
-	 * Nous avons même affiché un feedback visuel à l'utilisateur pour lui indiquer la zone de dépôt.
-	 * Nous devons maintenant déposer la pièce.
-	 */
+	* Callback appelé quand l'utilisateur dépose la pièce sélectionnée/déplacée.
+	*
+	* Nous avons avec succès déplacée la pièce sélectionnée.
+	* Nous avons même affiché un feedback visuel à l'utilisateur pour lui indiquer la zone de dépôt.
+	* Nous devons maintenant déposer la pièce.
+	*/
 	function pieceDropped(e) {
 		// Supprimer les listeners comme aucune pièce n'est actuellement déplacée.
 		document.onmousemove = null;
@@ -365,8 +385,8 @@
 	}
 
 	/**
-	 * Vérifier si le jeu est gagné après le déplacement d'une pièce
-	 */
+	* Vérifier si le jeu est gagné après le déplacement d'une pièce
+	*/
 	function resetPuzzleAndCheckWin(){
 		var gameWin = true;
 		var i;
@@ -395,9 +415,9 @@
 	}
 
 	/**
-	 * Jeu gagnée.
-	 * Relancer une nouvelle partie.
-	 */
+	* Jeu gagnée.
+	* Relancer une nouvelle partie.
+	*/
 	function gameWon(){
 		document.onmousedown = null;
 		document.onmousemove = null;
@@ -406,8 +426,8 @@
 	}
 
 	/**
-	 * Fonction utilitaire permettant de mélanger un array
-	 */
+	* Fonction utilitaire permettant de mélanger un array
+	*/
 	function shuffleArray(o){
 		for (var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
 		return o;
@@ -415,4 +435,6 @@
 
 	// Lancement du jeu
 	initGame();
+
+
 })();

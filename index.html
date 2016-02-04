@@ -2,20 +2,32 @@
 <html lang="fr">
 <head>
 	<meta charset="utf-8">
-    <title>Formation Web Avancé - Puzzle glissant</title>
+	<title>Formation Web Avancé - Puzzle glissant</title>
 	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script type="text/javascript" src="main.js"></script>
 </head>
- 
+
 <body>
+	<h1>Jeu du taquin</h1>
+	<div class="params">
+		Choisir la difficulté :
+		<select id="difficulty">
+			<option value="2">Facile</option>
+			<option value="3">Moyen</option>
+			<option value="4">Difficile</option>
+		</select>
+
+		<p id="moves"></p>
+
+		<p> Scores </p>
+		<p id="scores"></p>
+		</div>
+
 	<div class="wrapper">
-		<h1>Puzzle glissant (type Taquin)</h1>
-		<p>Ce puzzle se base sur l'utilisation des canevas HTML5 et de JavaScript.</p>
 		<canvas id="puzzleCanvas"></canvas>
 		<br />
 		<button id="puzzleStart">Démarrer le jeu</button>
 	</div>
-	<script type="text/javascript" src="main.js"></script>
-
 </body>
- 
+
 </html>
